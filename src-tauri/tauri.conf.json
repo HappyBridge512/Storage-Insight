@@ -1,0 +1,58 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Storage Insight",
+  "version": "0.1.0",
+  "identifier": "com.storageinsight.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devUrl": "http://127.0.0.1:5173",
+    "frontendDist": "../dist",
+    "additionalWatchFolders": ["../backend"]
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Storage Insight",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 1040,
+        "minHeight": 680,
+        "resizable": true,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; connect-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: https://asset.localhost; style-src 'self' 'unsafe-inline'; script-src 'self'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "publisher": "Storage Insight",
+    "category": "Utility",
+    "shortDescription": "Windows storage analysis and disk monitoring utility.",
+    "longDescription": "Storage Insight monitors disk health, storage capacity, disk activity, alerts, and folder usage on Windows.",
+    "icon": ["icons/icon.ico"],
+    "resources": {
+      "../backend/bin/storage-insight-backend.exe": "storage-insight-backend.exe"
+    },
+    "windows": {
+      "webviewInstallMode": {
+        "type": "offlineInstaller",
+        "silent": true
+      },
+      "minimumWebview2Version": "109.0.1518.0",
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "uninstallerIcon": "icons/icon.ico",
+        "installMode": "currentUser",
+        "languages": ["English", "Ukrainian"],
+        "displayLanguageSelector": true,
+        "startMenuFolder": "Storage Insight",
+        "installerHooks": "windows/nsis-hooks.nsh"
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+psutil>=5.9.8
+pySMART>=1.4.0
+WMI>=1.5.1
+watchdog>=4.0.0

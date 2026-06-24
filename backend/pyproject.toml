@@ -1,0 +1,15 @@
+[project]
+name = "storage-insight-backend"
+version = "0.1.0"
+description = "Python monitoring engine for Storage Insight"
+requires-python = ">=3.11"
+dependencies = [
+  "psutil>=5.9.8",
+  "pySMART>=1.4.0",
+  "WMI>=1.5.1",
+  "watchdog>=4.0.0"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

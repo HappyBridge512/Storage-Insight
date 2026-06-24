@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+target/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+.env.production
+.env.development
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tauri
+src-tauri/gen/
+src-tauri/icons/*.ico
+src-tauri/icons/*.icns
+
+# Rust
+src-tauri/target/
+Cargo.lock
+
+# Temporary
+.tmp-config/
+temp/
+tmp/
+
+# Electron/Vite cache
+.vite/
+.cache/
+
+# Testing
+coverage/
+
+# Cursor
+.cursor/
+
+# Local scripts output
+scripts/output/
