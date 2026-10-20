@@ -18,9 +18,18 @@ class JsonLineTransport:
         self._input = input_stream
         self._output = output_stream
         self._write_lock = asyncio.Lock()
+        self._closed = False
+
+    @property
+    def closed(self) -> bool:
+        return self._closed
 
     async def read_message(self) -> RequestMessage | None:
-        line = await asyncio.to_thread(self._input.readline)
+        try:
+            line = await asyncio.to_thread(self._input.readline)
+        except (BrokenPipeError, OSError):
+            self._closed = True
+            return None
         if line == "":
             return None
 
@@ -42,6 +51,13 @@ class JsonLineTransport:
 
     async def _write(self, message: dict[str, Any]) -> None:
         async with self._write_lock:
+            if self._closed:
+                return
             encoded = json.dumps(message, ensure_ascii=False, separators=(",", ":"))
-            self._output.write(encoded + "\n")
-            self._output.flush()
+            try:
+                self._output.write(encoded + "\n")
+                self._output.flush()
+            except (BrokenPipeError, OSError):
+                # The Rust parent owns the other end of this pipe. Once it has
+                # closed the window or process, no response can be delivered.
+                self._closed = True

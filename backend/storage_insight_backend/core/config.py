@@ -37,7 +37,7 @@ class AlertConfig:
 class ScannerConfig:
     max_depth: int = 12
     max_children_per_node: int = 80
-    max_result_nodes: int = 0
+    max_result_nodes: int = 8000
     max_file_types: int = 64
     completed_result_limit: int = 3
     max_active_scans: int = 1

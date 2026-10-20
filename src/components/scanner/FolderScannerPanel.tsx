@@ -201,6 +201,26 @@ export function FolderScannerPanel() {
           <div className="empty-treemap">No scan results yet</div>
         )}
       </div>
+
+      {result ? (
+        <div className="scan-results-list">
+          <div className="panel-heading">
+            <h3>Largest items</h3>
+            <span>Sorted by size</span>
+          </div>
+          {result.root.children
+            .slice()
+            .sort((left, right) => right.size_bytes - left.size_bytes)
+            .slice(0, 20)
+            .map((node) => (
+              <button key={node.path} className="scan-result-row" onClick={() => setSelectedNode(node)}>
+                <span>{node.name}</span>
+                <strong>{formatBytes(node.size_bytes)}</strong>
+                <small>{node.file_count.toLocaleString()} files</small>
+              </button>
+            ))}
+        </div>
+      ) : null}
     </section>
   );
 }

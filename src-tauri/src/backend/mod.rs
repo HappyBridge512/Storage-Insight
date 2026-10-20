@@ -215,11 +215,7 @@ fn backend_runtime(app_handle: &AppHandle) -> Result<BackendRuntime, BackendBrid
     let python = python_backend_runtime();
     let bundled = bundled_backend_runtime(app_handle);
 
-    let candidates = if cfg!(debug_assertions) {
-        vec![python, bundled]
-    } else {
-        vec![bundled, python]
-    };
+    let candidates = vec![bundled, python];
 
     for runtime in candidates.into_iter().flatten() {
         if !runtime.working_dir.is_dir() {
@@ -294,6 +290,22 @@ fn bundled_backend_candidates(app_handle: &AppHandle) -> Vec<PathBuf> {
         candidates.push(PathBuf::from(path));
     }
 
+    let project = project_root();
+    let project_candidates = [
+        project
+            .join("backend")
+            .join("bin")
+            .join("storage-insight-backend.exe"),
+        project
+            .join("backend")
+            .join("dist")
+            .join("storage-insight-backend.exe"),
+    ];
+
+    if cfg!(debug_assertions) {
+        candidates.extend(project_candidates.iter().cloned());
+    }
+
     if let Ok(resource_dir) = app_handle.path().resource_dir() {
         candidates.push(
             resource_dir
@@ -304,19 +316,9 @@ fn bundled_backend_candidates(app_handle: &AppHandle) -> Vec<PathBuf> {
         candidates.push(resource_dir.join("storage-insight-backend.exe"));
     }
 
-    let project = project_root();
-    candidates.push(
-        project
-            .join("backend")
-            .join("bin")
-            .join("storage-insight-backend.exe"),
-    );
-    candidates.push(
-        project
-            .join("backend")
-            .join("dist")
-            .join("storage-insight-backend.exe"),
-    );
+    if !cfg!(debug_assertions) {
+        candidates.extend(project_candidates);
+    }
 
     candidates
 }

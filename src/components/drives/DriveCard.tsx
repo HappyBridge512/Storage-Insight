@@ -52,7 +52,7 @@ export function DriveCard({ drive }: { drive: DriveInfo }) {
       <footer className="drive-foot">
         <span>
           <Thermometer size={14} />
-          {drive.smart.temperature_celsius === null ? "Temperature not reported" : `${drive.smart.temperature_celsius} C`}
+          {drive.smart.temperature_celsius === null ? "Temperature unavailable" : `${drive.smart.temperature_celsius} C`}
         </span>
         <span title={drive.smart.reason ?? undefined}>
           <Zap size={14} />

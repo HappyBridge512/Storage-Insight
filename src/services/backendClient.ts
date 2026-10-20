@@ -35,6 +35,11 @@ async function request<T>(method: BackendMethod, payload: Record<string, unknown
   try {
     return await invoke<T>("backend_request", { method, payload });
   } catch (err) {
+    void invoke("frontend_log", {
+      level: "error",
+      message: "Backend request failed",
+      context: { method, error: err instanceof Error ? err.message : String(err) },
+    }).catch(() => undefined);
     throw normalizeBackendError(err);
   }
 }

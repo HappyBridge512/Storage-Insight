@@ -75,6 +75,10 @@ export function BackendProvider({ children }: { children: ReactNode }) {
           }
 
           if (event.event === "backend.exited") {
+            const exitCode = (event.payload as { exit_code?: number | null }).exit_code ?? null;
+            backendClient
+              .logFrontendError("error", "Backend process exited", { exit_code: exitCode })
+              .catch(() => undefined);
             setStatus("offline");
             setError("Python backend stopped unexpectedly. Restart Storage Insight to reconnect.");
           }

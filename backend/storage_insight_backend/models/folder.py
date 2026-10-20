@@ -82,10 +82,13 @@ class FolderNode:
 
         children: list[dict[str, Any]] = []
         for index, child in enumerate(self.children):
-            if remaining is not None and remaining[0] <= 1 and index < len(self.children) - 1:
-                remaining[0] = 0
-                children.append(_aggregate_children(self.children[index:], self.path)._summary_dict())
-                break
+            if remaining is not None:
+                if remaining[0] <= 0:
+                    break
+                if remaining[0] == 1 and index < len(self.children) - 1:
+                    remaining[0] -= 1
+                    children.append(_aggregate_children(self.children[index:], self.path)._summary_dict())
+                    break
 
             children.append(
                 child._to_dict(

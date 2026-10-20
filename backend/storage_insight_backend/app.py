@@ -34,13 +34,17 @@ async def run() -> None:
     router = BackendRouter(config, drive_service, monitor_service, folder_scanner, smart_service, alert_service)
 
     logger.info("Storage Insight backend starting")
-    await transport.emit("backend.started", {"version": "0.1.0"})
 
     try:
+        await transport.emit("backend.started", {"version": "0.1.0"})
+        if transport.closed:
+            logger.info("stdout closed during startup; shutting down backend")
+            return
+
         while True:
             message = await transport.read_message()
             if message is None:
-                logger.info("stdin closed; shutting down backend")
+                logger.info("IPC input closed; shutting down backend")
                 break
 
             if message.method == "shutdown":
